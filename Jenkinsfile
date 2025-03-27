@@ -10,7 +10,6 @@ pipeline {
                 }
             }
             steps {
-                echo 'Hello World'
                 sh '''
                 ls -la
                 node --version
@@ -18,6 +17,20 @@ pipeline {
                 npm ci
                 npm run build
                 ls -la
+                '''
+            }
+        }
+        stage('Test'){
+            agent{
+                docker{
+                    image 'node:18-alpine'
+                    reuseNode true  
+                }
+            }
+            steps{
+                sh ''' 
+                npm ci
+                npm run test
                 '''
             }
         }
